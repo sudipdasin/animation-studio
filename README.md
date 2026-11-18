@@ -36,3 +36,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [FEEDBACK.md](FEEDBACK.md) for commun
 ## GitHub Pages configuration
 
 The release artifacts work without GitHub Pages. To enable the optional site deployment, configure repository **Settings → Pages → Build and deployment → Source: GitHub Actions**, then add repository Actions variable `ENABLE_GITHUB_PAGES=true` under **Settings → Secrets and variables → Actions → Variables**. Until enabled, the Pages job is skipped so it does not falsely mark successful VM tests and releases as failed.
+
+## Community / future Pro editions
+
+**Animation Studio Community** remains public, free, and GPL-3.0. A future **Animation Studio Pro** may add independently developed commercial capabilities from a **separate private repository**; the private repository has not yet been created. Community code and contributions are not automatically relicensed as proprietary. See [architecture](docs/architecture-community-pro.md), [public/private policy](docs/community-pro-policy.md), and [private bootstrap guide](docs/private-repository-bootstrap.md). No Pro-only source or entitlement logic is included in Community builds.
