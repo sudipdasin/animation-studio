@@ -22,7 +22,7 @@ Depends: python3, chromium | google-chrome-stable
 Maintainer: Animation Studio Contributors <noreply@example.invalid>
 Description: Experimental 3D modeling, sculpting and animation browser app
 CTRL
-cat > "$TMP/usr/bin/animation-studio-beta" <<'LAUNCH'
+cat > "$TMP/usr/bin/animation-studio-community" <<'LAUNCH'
 #!/usr/bin/env python3
 import http.server
 import subprocess
@@ -42,7 +42,7 @@ try:
 finally:
     server.shutdown()
 LAUNCH
-chmod 755 "$TMP/usr/bin/animation-studio-beta"
+chmod 755 "$TMP/usr/bin/animation-studio-community"
 cat > "$TMP/usr/share/applications/animation-studio-community.desktop" <<'DESKTOP'
 [Desktop Entry]
 Type=Application
@@ -53,5 +53,5 @@ Icon=/opt/animation-studio/icon.svg
 Terminal=false
 Categories=Graphics;3DGraphics;
 DESKTOP
-chmod 644 "$TMP/usr/share/applications/animation-studio-beta.desktop"
+chmod 644 "$TMP/usr/share/applications/animation-studio-community.desktop"
 dpkg-deb --build --root-owner-group "$TMP" "$OUT/animation-studio-community_0.5.0_all.deb"
