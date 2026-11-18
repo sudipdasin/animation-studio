@@ -32,3 +32,7 @@ Model primitives; mesh sculpting with Inflate/Deflate/Smooth/Flatten/Crease/Grab
 GitHub Pages deployment may require enabling **Settings → Pages → Source: GitHub Actions** in repository settings. The release's standalone web ZIP is available independently of Pages.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) and [FEEDBACK.md](FEEDBACK.md) for community participation.
+
+## GitHub Pages configuration
+
+The release artifacts work without GitHub Pages. To enable the optional site deployment, configure repository **Settings → Pages → Build and deployment → Source: GitHub Actions**, then add repository Actions variable `ENABLE_GITHUB_PAGES=true` under **Settings → Secrets and variables → Actions → Variables**. Until enabled, the Pages job is skipped so it does not falsely mark successful VM tests and releases as failed.
