@@ -20,7 +20,7 @@ test('offline-bundled 3D application initializes with cube and sphere',async()=>
   const meshes=await page.evaluate(()=>window.__studioDebug.meshes());
   assert(meshes.some(m=>m.type==='box'));
   assert(meshes.some(m=>m.type==='sphere'));
-  const bundles=await page.locator('script[src="app.bundle.js"]').count();
+  const bundles=await page.locator('script[src$="app.bundle.js"]').count();
   assert.equal(bundles,1);
   await page.close();
 });
