@@ -13,3 +13,8 @@ with tempfile.TemporaryDirectory() as folder:
     subprocess.run(['node', '--check', str(module)], check=True)
 assert (root / 'LICENSE').read_text(encoding='utf-8').startswith('                    GNU GENERAL PUBLIC LICENSE')
 print('Static checks passed; browser/WebGL/interactive behavior NOT verified.')
+
+# Validate beta feedback UI and GitHub issue-draft integration.
+for token in ('id="beta-feedback"', 'id="feedback-workspace"', 'id="feedback-description"', 'id="feedback-submit"', 'github.com/sudipdasin/animation-studio/issues/new?'):
+    assert token in html, f"missing feedback UI element: {token}"
+print('Feedback UI static checks passed; interaction NOT verified.')

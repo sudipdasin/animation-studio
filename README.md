@@ -1,4 +1,4 @@
-# Animation Studio — Public Beta v0.3.0
+# Animation Studio — Public Beta v0.3.2
 
 **Experimental open-source beta. Not a stable or fully validated production release.**
 
@@ -31,7 +31,7 @@ The browser prototype's features have **not been fully end-to-end tested**. Scul
 ```bash
 python3 tests/static_smoke.py
 bash scripts/build-deb.sh
-sudo apt install ./dist/animation-studio-beta_0.3.0_all.deb
+sudo apt install ./dist/animation-studio-beta_0.3.2_all.deb
 ```
 
 The installer starts an ephemeral localhost server and opens Chromium in app mode; it installs no background system service. Package is for Debian-derived Linux distributions and is not a native Windows/macOS installer.
@@ -42,4 +42,8 @@ The installer starts an ephemeral localhost server and opens Chromium in app mod
 
 ## Release
 
-The `Publish beta` GitHub Actions workflow runs static checks, builds a Debian package, creates a **prerelease** tagged `v0.3.0-beta.1` if none exists, and attempts GitHub Pages deployment. Public hosting and release status must be verified in the Actions logs / Releases page; committing a workflow does not itself prove deployment succeeded.
+The `Publish beta` GitHub Actions workflow runs static checks, builds a Debian package, creates a **prerelease** tagged `v0.3.2-beta.1` if none exists, and attempts GitHub Pages deployment. Public hosting and release status must be verified in the Actions logs / Releases page; committing a workflow does not itself prove deployment succeeded.
+
+## Beta 0.3.2 CI and deployment
+
+Static validation and Debian package creation are automated. GitHub Pages deployment is currently blocked by repository Pages configuration; to enable it, set **Settings → Pages → Build and deployment → Source: GitHub Actions**. The workflow no longer attempts to change repository settings automatically. No browser-level sculpting test has passed yet.
