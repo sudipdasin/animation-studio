@@ -1,0 +1,31 @@
+# Manual-only CircleCI onboarding placeholder.
+# No jobs or workflows are enabled by default; this file does not publish,
+# deploy, synchronize repositories, or access proprietary assets.
+version: 2.1
+
+parameters:
+  run_checks:
+    type: boolean
+    default: false
+
+jobs:
+  onboarding-check:
+    docker:
+      - image: cimg/base:stable
+    resource_class: small
+    steps:
+      - checkout
+      - run:
+          name: Confirm CircleCI checkout only
+          command: |
+            test -d .git
+            echo "Manual CircleCI onboarding check completed. No application tests were run."
+
+workflows:
+  manual-onboarding-check:
+    when: << pipeline.parameters.run_checks >>
+    jobs:
+      - onboarding-check:
+          filters:
+            branches:
+              only: main
