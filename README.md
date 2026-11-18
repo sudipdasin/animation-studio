@@ -47,3 +47,7 @@ The `Publish beta` GitHub Actions workflow runs static checks, builds a Debian p
 ## Beta 0.3.2 CI and deployment
 
 Static validation and Debian package creation are automated. GitHub Pages deployment is currently blocked by repository Pages configuration; to enable it, set **Settings → Pages → Build and deployment → Source: GitHub Actions**. The workflow no longer attempts to change repository settings automatically. No browser-level sculpting test has passed yet.
+
+## v0.3.3 performance preview
+
+Sculpt smoothing now constructs a mesh-local adjacency cache and averages each unique neighbor once, avoiding a full triangle-index scan for every brushed vertex. This is an algorithmic performance improvement; interactive speed and visual fidelity have not yet been benchmarked in a real browser.

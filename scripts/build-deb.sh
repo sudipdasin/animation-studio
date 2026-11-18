@@ -10,7 +10,7 @@ cp "$ROOT"/{index.html,manifest.webmanifest,sw.js,icon.svg,README.md,CONTRIBUTIN
 cp "$ROOT/LICENSE" "$TMP/usr/share/doc/animation-studio-beta/copyright"
 cat > "$TMP/DEBIAN/control" <<'CTRL'
 Package: animation-studio-beta
-Version: 0.3.2
+Version: 0.3.3
 Section: graphics
 Priority: optional
 Architecture: all
@@ -50,4 +50,4 @@ Terminal=false
 Categories=Graphics;3DGraphics;
 DESKTOP
 chmod 644 "$TMP/usr/share/applications/animation-studio-beta.desktop"
-dpkg-deb --build --root-owner-group "$TMP" "$OUT/animation-studio-beta_0.3.2_all.deb"
+dpkg-deb --build --root-owner-group "$TMP" "$OUT/animation-studio-beta_0.3.3_all.deb"

@@ -18,3 +18,9 @@ print('Static checks passed; browser/WebGL/interactive behavior NOT verified.')
 for token in ('id="beta-feedback"', 'id="feedback-workspace"', 'id="feedback-description"', 'id="feedback-submit"', 'github.com/sudipdasin/animation-studio/issues/new?'):
     assert token in html, f"missing feedback UI element: {token}"
 print('Feedback UI static checks passed; interaction NOT verified.')
+
+# Smoothing must use cached adjacency rather than scan every face for each vertex.
+assert 'function vertexNeighbors(geo)' in html
+assert 'neighbors?.[i]' in html
+assert 'for(let j=0;j<ix.length;j+=3)' not in html
+print('Smoothing adjacency static regression passed; visual correctness NOT verified.')

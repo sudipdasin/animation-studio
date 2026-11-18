@@ -24,8 +24,8 @@ jobs:
         run: bash scripts/build-deb.sh
       - name: Validate package structure
         run: |
-          dpkg-deb --info dist/animation-studio-beta_0.3.2_all.deb
-          dpkg-deb --contents dist/animation-studio-beta_0.3.2_all.deb | grep '/opt/animation-studio/index.html'
+          dpkg-deb --info dist/animation-studio-beta_0.3.3_all.deb
+          dpkg-deb --contents dist/animation-studio-beta_0.3.3_all.deb | grep '/opt/animation-studio/index.html'
       - uses: actions/upload-artifact@v4
         with:
           name: linux-beta-deb
@@ -36,17 +36,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: bash scripts/build-deb.sh
-      - name: Publish beta 0.3.2 prerelease
+      - name: Publish beta 0.3.3 prerelease
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         shell: bash
         run: |
-          TAG=v0.3.2-beta.1
+          TAG=v0.3.3-beta.1
           if gh release view "$TAG" >/dev/null 2>&1; then
             echo "Beta release already exists."
           else
-            gh release create "$TAG" dist/animation-studio-beta_0.3.2_all.deb --target "$GITHUB_SHA" --title "Animation Studio v0.3.2 Beta 1" --prerelease --notes "Beta package version aligned to release. In-app GitHub feedback available. Static checks and Debian package checks automated; interactive browser tests remain pending."
+            gh release create "$TAG" dist/animation-studio-beta_0.3.3_all.deb --target "$GITHUB_SHA" --title "Animation Studio v0.3.3 Beta 1" --prerelease --notes "Beta package version aligned to release. In-app GitHub feedback available. Static checks and Debian package checks automated; interactive browser tests remain pending."
           fi
   pages:
     needs: verify-build
