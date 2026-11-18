@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   verify-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
@@ -46,7 +46,7 @@ jobs:
             web-dist/
   release:
     needs: verify-build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -69,7 +69,7 @@ jobs:
           fi
   pages:
     needs: verify-build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     continue-on-error: true
     environment:
       name: github-pages
