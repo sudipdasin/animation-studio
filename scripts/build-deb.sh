@@ -8,13 +8,13 @@ if [ ! -f "$ROOT/web-dist/app.bundle.js" ]; then
 fi
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
-mkdir -p "$TMP/DEBIAN" "$TMP/opt/animation-studio" "$TMP/usr/bin" "$TMP/usr/share/applications" "$TMP/usr/share/doc/animation-studio-beta"
+mkdir -p "$TMP/DEBIAN" "$TMP/opt/animation-studio" "$TMP/usr/bin" "$TMP/usr/share/applications" "$TMP/usr/share/doc/animation-studio-community"
 cp "$ROOT"/web-dist/{index.html,app.bundle.js,manifest.webmanifest,sw.js,icon.svg} "$TMP/opt/animation-studio/"
 cp "$ROOT"/{README.md,CONTRIBUTING.md,FEEDBACK.md,LICENSE} "$TMP/opt/animation-studio/"
-cp "$ROOT/LICENSE" "$TMP/usr/share/doc/animation-studio-beta/copyright"
+cp "$ROOT/LICENSE" "$TMP/usr/share/doc/animation-studio-community/copyright"
 cat > "$TMP/DEBIAN/control" <<'CTRL'
-Package: animation-studio-beta
-Version: 0.4.0
+Package: animation-studio-community
+Version: 0.5.0
 Section: graphics
 Priority: optional
 Architecture: all
@@ -35,7 +35,7 @@ server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), partial(http.server.S
 url = f'http://127.0.0.1:{server.server_port}/index.html'
 threading.Thread(target=server.serve_forever, daemon=True).start()
 try:
-    for browser in ('chromium', 'google-chrome-stable', 'google-chrome'):
+    for browser in ('chromium', 'chromium-browser', 'google-chrome-stable', 'google-chrome'):
         if which(browser):
             subprocess.run([browser, '--app=' + url], check=False)
             break
@@ -43,15 +43,15 @@ finally:
     server.shutdown()
 LAUNCH
 chmod 755 "$TMP/usr/bin/animation-studio-beta"
-cat > "$TMP/usr/share/applications/animation-studio-beta.desktop" <<'DESKTOP'
+cat > "$TMP/usr/share/applications/animation-studio-community.desktop" <<'DESKTOP'
 [Desktop Entry]
 Type=Application
-Name=Animation Studio Beta
+Name=Animation Studio Community
 Comment=3D modeling and animation preview
-Exec=animation-studio-beta
+Exec=animation-studio-community
 Icon=/opt/animation-studio/icon.svg
 Terminal=false
 Categories=Graphics;3DGraphics;
 DESKTOP
 chmod 644 "$TMP/usr/share/applications/animation-studio-beta.desktop"
-dpkg-deb --build --root-owner-group "$TMP" "$OUT/animation-studio-beta_0.4.0_all.deb"
+dpkg-deb --build --root-owner-group "$TMP" "$OUT/animation-studio-community_0.5.0_all.deb"
