@@ -1,0 +1,71 @@
+name: Publish beta
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: animation-beta-publish
+  cancel-in-progress: false
+jobs:
+  verify-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Static verification
+        run: python3 tests/static_smoke.py
+      - name: Build Linux installer
+        run: bash scripts/build-deb.sh
+      - name: Validate package structure
+        run: |
+          dpkg-deb --info dist/animation-studio-beta_0.3.0_all.deb
+          dpkg-deb --contents dist/animation-studio-beta_0.3.0_all.deb | grep '/opt/animation-studio/index.html'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-beta-deb
+          path: dist/*.deb
+  release:
+    needs: verify-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/build-deb.sh
+      - name: Publish beta prerelease once
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          TAG=v0.3.0-beta.1
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Beta release already exists; preserving immutable tag."
+          else
+            gh release create "$TAG" dist/animation-studio-beta_0.3.0_all.deb --target "$GITHUB_SHA" --title "Animation Studio v0.3.0 Beta 1" --prerelease --notes "Experimental public preview. Features are not yet end-to-end browser verified. Includes Debian/Ubuntu Linux .deb installer; source is GPL-3.0. Report bugs in GitHub Issues."
+          fi
+  pages:
+    needs: verify-build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          bash scripts/build-deb.sh
+          mkdir -p _site/downloads
+          cp index.html icon.svg manifest.webmanifest sw.js _site/
+          cp dist/*.deb _site/downloads/
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,22 @@
+name: Feature request
+description: Propose an Animation Studio improvement
+title: "[Feature] "
+labels: []
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested behavior
+    validations:
+      required: true
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Maturity
+      options: [Core workspace, Experimental preview]
