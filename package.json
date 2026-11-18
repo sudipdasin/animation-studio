@@ -1,0 +1,17 @@
+{
+  "name": "animation-studio",
+  "version": "0.4.0-beta.1",
+  "private": true,
+  "description": "GPL-3.0 browser-based 3D modeling and animation beta",
+  "scripts": {
+    "build:web": "node scripts/build-web.mjs",
+    "test:browser": "node --test tests/browser.test.mjs"
+  },
+  "dependencies": {
+    "three": "0.161.0",
+    "esbuild": "0.25.12"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1"
+  }
+}

@@ -1,4 +1,4 @@
-name: Publish beta
+name: Build and VM-test beta
 on:
   push:
     branches: [main]
@@ -13,54 +13,76 @@ concurrency:
 jobs:
   verify-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Install pinned dependencies
+        run: npm install --no-audit --no-fund
+      - name: Install Chromium for VM browser tests
+        run: npx playwright install --with-deps chromium
       - name: Static verification
         run: python3 tests/static_smoke.py
-      - name: Build Linux installer
+      - name: Build offline-capable browser bundle
+        run: npm run build:web
+      - name: Chromium WebGL interaction tests
+        run: npm run test:browser
+      - name: Build Debian installer
         run: bash scripts/build-deb.sh
-      - name: Validate package structure
+      - name: Verify Debian package
         run: |
-          dpkg-deb --info dist/animation-studio-beta_0.3.3_all.deb
-          dpkg-deb --contents dist/animation-studio-beta_0.3.3_all.deb | grep '/opt/animation-studio/index.html'
+          dpkg-deb --info dist/animation-studio-beta_0.4.0_all.deb
+          dpkg-deb --contents dist/animation-studio-beta_0.4.0_all.deb | grep '/opt/animation-studio/app.bundle.js'
+      - name: Package standalone web preview
+        run: cd web-dist && zip -qr ../dist/animation-studio-web-v0.4.0-beta.1.zip .
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: linux-beta-deb
-          path: dist/*.deb
+          name: vm-beta-build
+          path: |
+            dist/
+            web-dist/
   release:
     needs: verify-build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: bash scripts/build-deb.sh
-      - name: Publish beta 0.3.3 prerelease
+      - uses: actions/download-artifact@v4
+        with:
+          name: vm-beta-build
+          path: artifacts
+      - name: Publish validated v0.4.0 prerelease
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         shell: bash
         run: |
-          TAG=v0.3.3-beta.1
+          TAG=v0.4.0-beta.1
+          DEB=$(find artifacts -name 'animation-studio-beta_0.4.0_all.deb' -print -quit)
+          WEB=$(find artifacts -name 'animation-studio-web-v0.4.0-beta.1.zip' -print -quit)
+          test -s "$DEB" && test -s "$WEB"
           if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "Beta release already exists."
+            echo "Release exists; not overwriting."
           else
-            gh release create "$TAG" dist/animation-studio-beta_0.3.3_all.deb --target "$GITHUB_SHA" --title "Animation Studio v0.3.3 Beta 1" --prerelease --notes "Beta package version aligned to release. In-app GitHub feedback available. Static checks and Debian package checks automated; interactive browser tests remain pending."
+            gh release create "$TAG" "$DEB" "$WEB" --target "$GITHUB_SHA" --title "Animation Studio v0.4.0 Beta 1" --prerelease --notes "Self-contained browser app (no Three.js CDN required), cached sculpt smoothing, in-app feedback, and automated Chromium/WebGL VM regression tests. Experimental beta; further manual QA recommended."
           fi
   pages:
     needs: verify-build
     runs-on: ubuntu-latest
+    continue-on-error: true
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: vm-beta-build
+          path: artifacts
       - run: |
-          bash scripts/build-deb.sh
           mkdir -p _site/downloads
-          cp index.html icon.svg manifest.webmanifest sw.js _site/
-          cp dist/*.deb _site/downloads/
+          cp artifacts/web-dist/* _site/
+          cp artifacts/dist/* _site/downloads/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {build} from 'esbuild';
+const root=process.cwd(),source=fs.readFileSync(path.join(root,'index.html'),'utf8');
+const moduleMatch=source.match(/<script type="module">([\s\S]*?)<\/script>/);
+if(!moduleMatch)throw new Error('Inline 3D module missing');
+const output=path.join(root,'web-dist');fs.mkdirSync(output,{recursive:true});
+await build({stdin:{contents:moduleMatch[1],resolveDir:root,sourcefile:'animation-studio.mjs',loader:'js'},bundle:true,format:'esm',target:['es2022'],minify:true,outfile:path.join(output,'app.bundle.js'),logLevel:'info'});
+let html=source.replace(/<script type="importmap">[\s\S]*?<\/script>/,'').replace(moduleMatch[0],'<script type="module" src="./app.bundle.js"></script>');
+fs.writeFileSync(path.join(output,'index.html'),html);
+for(const file of ['icon.svg','manifest.webmanifest','sw.js'])fs.copyFileSync(path.join(root,file),path.join(output,file));
+const service=path.join(output,'sw.js');let sw=fs.readFileSync(service,'utf8');sw=sw.replace("['./','./index.html','./manifest.webmanifest','./icon.svg']","['./','./index.html','./manifest.webmanifest','./icon.svg','./app.bundle.js']");fs.writeFileSync(service,sw);
+console.log('Self-contained browser build:',output);

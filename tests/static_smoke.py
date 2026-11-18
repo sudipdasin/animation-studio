@@ -24,3 +24,8 @@ assert 'function vertexNeighbors(geo)' in html
 assert 'neighbors?.[i]' in html
 assert 'for(let j=0;j<ix.length;j+=3)' not in html
 print('Smoothing adjacency static regression passed; visual correctness NOT verified.')
+
+assert 'window.__studioDebug' in html
+assert (root / 'scripts/build-web.mjs').is_file()
+assert (root / 'tests/browser.test.mjs').is_file()
+print('v0.4.0 VM browser test suite present; runtime tests execute in GitHub Actions.')

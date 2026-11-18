@@ -3,14 +3,18 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="${1:-$ROOT/dist}"
 mkdir -p "$OUT"
+if [ ! -f "$ROOT/web-dist/app.bundle.js" ]; then
+  (cd "$ROOT" && npm run build:web)
+fi
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 mkdir -p "$TMP/DEBIAN" "$TMP/opt/animation-studio" "$TMP/usr/bin" "$TMP/usr/share/applications" "$TMP/usr/share/doc/animation-studio-beta"
-cp "$ROOT"/{index.html,manifest.webmanifest,sw.js,icon.svg,README.md,CONTRIBUTING.md,FEEDBACK.md,LICENSE} "$TMP/opt/animation-studio/"
+cp "$ROOT"/web-dist/{index.html,app.bundle.js,manifest.webmanifest,sw.js,icon.svg} "$TMP/opt/animation-studio/"
+cp "$ROOT"/{README.md,CONTRIBUTING.md,FEEDBACK.md,LICENSE} "$TMP/opt/animation-studio/"
 cp "$ROOT/LICENSE" "$TMP/usr/share/doc/animation-studio-beta/copyright"
 cat > "$TMP/DEBIAN/control" <<'CTRL'
 Package: animation-studio-beta
-Version: 0.3.3
+Version: 0.4.0
 Section: graphics
 Priority: optional
 Architecture: all
@@ -50,4 +54,4 @@ Terminal=false
 Categories=Graphics;3DGraphics;
 DESKTOP
 chmod 644 "$TMP/usr/share/applications/animation-studio-beta.desktop"
-dpkg-deb --build --root-owner-group "$TMP" "$OUT/animation-studio-beta_0.3.3_all.deb"
+dpkg-deb --build --root-owner-group "$TMP" "$OUT/animation-studio-beta_0.4.0_all.deb"
