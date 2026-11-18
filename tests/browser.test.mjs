@@ -79,3 +79,11 @@ test('Community feedback identifies current beta and responsive viewport remains
   assert.equal(await page.locator('[data-mode="sculpt"]').isVisible(),true);
   await page.close();
 });
+
+test('invalid project import is rejected without destroying current scene',async()=>{
+ const page=await openApp();
+ const before=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await assert.rejects(page.evaluate(()=>window.__studioDebug.loadProject({version:1,objects:[{type:'sphere',name:'broken',color:'#ffffff',position:[0,0,0],rotation:[0,0,0],scale:[Infinity,1,1]}]})));
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),before);
+ await page.close();
+});
