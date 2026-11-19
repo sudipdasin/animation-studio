@@ -5,8 +5,8 @@ Open-source experimental 3D modeling, sculpting, painting and animation browser 
 ## Download
 
 See [Releases](https://github.com/sudipdasin/animation-studio/releases) for:
-- `animation-studio-community_0.5.1_all.deb` — Debian/Ubuntu Linux installer.
-- `animation-studio-web-v0.5.1-beta.1.zip` — standalone web preview, including bundled Three.js.
+- `animation-studio-community_0.6.0_all.deb` — Debian/Ubuntu Linux installer.
+- `animation-studio-web-v0.6.0-beta.1.zip` — standalone web preview, including bundled Three.js.
 
 The standalone web preview runs with a simple localhost HTTP server and **does not require a Three.js CDN**. Extract the ZIP, then run `python3 -m http.server 8000` in its folder and open http://localhost:8000.
 
@@ -54,3 +54,10 @@ The release artifacts work without GitHub Pages. To enable the optional site dep
 - Reject unsupported formats, oversized project files and excessive object/keyframe counts.
 - Add a browser regression for non-destructive failure handling.
 - Maintain separate GPL Community and private Pro repositories; Community improvements are proposed to Pro through one-way private synchronization, subject to CI and review.
+
+## v0.6.0 Beta 1 release notes
+
+- Duplicate selected scene objects using the viewport button or Ctrl+D; cloned geometry and materials are independent.
+- Save projects with Ctrl+S when focus is outside editable fields.
+- Preserve validated project-import safeguards and regression coverage from v0.5.1.
+- Beta release; continue reporting issues via the in-app GitHub feedback form.
