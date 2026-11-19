@@ -32,7 +32,7 @@ function download(name,content,type){const url=URL.createObjectURL(new Blob([con
 function loadProject(data){validateProject(data);while(items.length){select(items[0]);removeSelected()}keys.length=0;for(const o of data.objects){if(!['box','sphere','cylinder','cone','torus','plane'].includes(o.type))continue;addShape(o.type,o)}for(const k of data.keys||[])keys.push(k);if(data.light){light.intensity=data.light.intensity;light.color.set(data.light.color);$('#lightIntensity').value=light.intensity;$('#lightColor').value=data.light.color}if(data.background){scene.background=new THREE.Color(data.background);$('#backgroundColor').value=data.background}select(items[0]||null);seek(0)}const RECOVERY_KEY='animation-studio-community-recovery-v1';
 const RECOVERY_BACKUP_KEY=RECOVERY_KEY+'-previous';
 const AUTOSAVE_KEY=RECOVERY_KEY+'-autosave';
-function autoSaveRecovery(){try{const data=JSON.stringify(project());parseRecovery(data);localStorage.setItem(AUTOSAVE_KEY,data)}catch{}}
+function autoSaveRecovery(){try{const data=JSON.stringify(project());parseRecovery(data);localStorage.setItem(AUTOSAVE_KEY,data);return true}catch{return false}}
 window.addEventListener('pagehide',autoSaveRecovery);
 setInterval(autoSaveRecovery,30000);
 function parseRecovery(raw){if(!raw||raw.length>1500000)throw Error('Recovery snapshot missing or too large');const data=JSON.parse(raw);return validateProject(data)}

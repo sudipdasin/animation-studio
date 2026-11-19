@@ -156,3 +156,23 @@ test('manual recovery snapshot is not overwritten by automatic recovery',async()
  assert.equal(await page.evaluate(()=>localStorage.getItem('animation-studio-community-recovery-v1')),original);
  await page.close();
 });
+
+test('automatic recovery can restore a changed scene when manual snapshots are absent',async()=>{
+ const page=await openApp();
+ const initial=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.evaluate(()=>window.dispatchEvent(new Event('pagehide')));
+ await page.evaluate(()=>window.__studioDebug.duplicateSelected());
+ await page.evaluate(()=>{localStorage.removeItem('animation-studio-community-recovery-v1');localStorage.removeItem('animation-studio-community-recovery-v1-previous')});
+ page.on('dialog',dialog=>dialog.accept());
+ await page.locator('#recoveryRestoreBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),initial);
+ await page.close();
+});
+test('invalid automatic snapshot does not destroy current scene',async()=>{
+ const page=await openApp();
+ const initial=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.evaluate(()=>{localStorage.removeItem('animation-studio-community-recovery-v1');localStorage.removeItem('animation-studio-community-recovery-v1-previous');localStorage.setItem('animation-studio-community-recovery-v1-autosave','{bad')});
+ await page.locator('#recoveryRestoreBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),initial);
+ await page.close();
+});
