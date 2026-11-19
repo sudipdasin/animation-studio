@@ -98,3 +98,11 @@ test('duplicating an object preserves source and creates independently editable 
  assert.deepEqual(await page.evaluate(()=>window.__studioDebug.signature('sphere')),before);
  await page.close();
 });
+
+test('local recovery snapshot can be saved without leaving the editor',async()=>{
+ const page=await openApp();
+ await page.locator('#recoverySaveBtn').click();
+ assert.equal(await page.evaluate(()=>Boolean(localStorage.getItem('animation-studio-community-recovery-v1'))),true);
+ assert.equal(await page.locator('#viewport').isVisible(),true);
+ await page.close();
+});
