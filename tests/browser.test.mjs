@@ -126,3 +126,16 @@ test('corrupted recovery never clears existing scene',async()=>{
  assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),initial);
  await page.close();
 });
+
+test('recovery falls back to previous valid snapshot when latest is corrupt',async()=>{
+ const page=await openApp();
+ const original=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.locator('#recoverySaveBtn').click();
+ await page.evaluate(()=>window.__studioDebug.duplicateSelected());
+ await page.locator('#recoverySaveBtn').click();
+ await page.evaluate(()=>localStorage.setItem('animation-studio-community-recovery-v1','{corrupt'));
+ page.on('dialog',dialog=>dialog.accept());
+ await page.locator('#recoveryRestoreBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),original);
+ await page.close();
+});
