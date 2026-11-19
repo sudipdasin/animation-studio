@@ -139,3 +139,20 @@ test('recovery falls back to previous valid snapshot when latest is corrupt',asy
  assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),original);
  await page.close();
 });
+
+test('automatic recovery preserves a scene on pagehide',async()=>{
+ const page=await openApp();
+ const count=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.evaluate(()=>window.dispatchEvent(new Event('pagehide')));
+ const stored=await page.evaluate(()=>JSON.parse(localStorage.getItem('animation-studio-community-recovery-v1-autosave')));
+ assert.equal(stored.objects.length,count);
+ await page.close();
+});
+test('manual recovery snapshot is not overwritten by automatic recovery',async()=>{
+ const page=await openApp();
+ await page.locator('#recoverySaveBtn').click();
+ const original=await page.evaluate(()=>localStorage.getItem('animation-studio-community-recovery-v1'));
+ await page.evaluate(()=>{window.__studioDebug.duplicateSelected();window.dispatchEvent(new Event('pagehide'))});
+ assert.equal(await page.evaluate(()=>localStorage.getItem('animation-studio-community-recovery-v1')),original);
+ await page.close();
+});
