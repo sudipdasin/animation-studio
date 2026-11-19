@@ -106,3 +106,23 @@ test('local recovery snapshot can be saved without leaving the editor',async()=>
  assert.equal(await page.locator('#viewport').isVisible(),true);
  await page.close();
 });
+
+test('recovery restores the saved scene after edits',async()=>{
+ const page=await openApp();
+ const initial=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.locator('#recoverySaveBtn').click();
+ await page.evaluate(()=>window.__studioDebug.duplicateSelected());
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),initial+1);
+ page.on('dialog',dialog=>dialog.accept());
+ await page.locator('#recoveryRestoreBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),initial);
+ await page.close();
+});
+test('corrupted recovery never clears existing scene',async()=>{
+ const page=await openApp();
+ const initial=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.evaluate(()=>localStorage.setItem('animation-studio-community-recovery-v1','{broken json'));
+ await page.locator('#recoveryRestoreBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),initial);
+ await page.close();
+});
