@@ -5,8 +5,8 @@ Open-source experimental 3D modeling, sculpting, painting and animation browser 
 ## Download
 
 See [Releases](https://github.com/sudipdasin/animation-studio/releases) for:
-- `animation-studio-community_0.6.4_all.deb` — Debian/Ubuntu Linux installer.
-- `animation-studio-web-v0.6.4-beta.1.zip` — standalone web preview, including bundled Three.js.
+- `animation-studio-community_0.6.5_all.deb` — Debian/Ubuntu Linux installer.
+- `animation-studio-web-v0.6.5-beta.1.zip` — standalone web preview, including bundled Three.js.
 
 The standalone web preview runs with a simple localhost HTTP server and **does not require a Three.js CDN**. Extract the ZIP, then run `python3 -m http.server 8000` in its folder and open http://localhost:8000.
 
@@ -90,3 +90,10 @@ The release artifacts work without GitHub Pages. To enable the optional site dep
 - Fall back to an automatic snapshot if both manual recovery generations are missing or invalid.
 - Browser regression coverage for autosave creation and manual snapshot preservation.
 - Autosave is best effort, origin-local and cannot guarantee recovery after sudden power loss or storage clearing.
+
+## v0.6.5 Beta 1 release notes
+
+- Add browser regression tests for restoring the automatic snapshot when manual snapshots are absent.
+- Confirm malformed automatic snapshots cannot destroy the active scene.
+- Retain independent manual and automatic recovery, previous-snapshot fallback, and safe project import.
+- Browser-local autosave remains best effort; use JSON downloads for portable backups.
