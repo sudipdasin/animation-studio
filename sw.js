@@ -1,4 +1,4 @@
-const CACHE='animation-studio-community-v061-beta1';
+const CACHE='animation-studio-community-v062-beta1';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./app.bundle.js'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('animation-studio-')&&k!==CACHE).map(k=>caches.delete(k)))),self.clients.claim()])));

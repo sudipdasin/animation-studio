@@ -14,7 +14,7 @@ cp "$ROOT"/{README.md,CONTRIBUTING.md,FEEDBACK.md,LICENSE} "$TMP/opt/animation-s
 cp "$ROOT/LICENSE" "$TMP/usr/share/doc/animation-studio-community/copyright"
 cat > "$TMP/DEBIAN/control" <<'CTRL'
 Package: animation-studio-community
-Version: 0.6.1
+Version: 0.6.2
 Section: graphics
 Priority: optional
 Architecture: all
@@ -54,4 +54,4 @@ Terminal=false
 Categories=Graphics;3DGraphics;
 DESKTOP
 chmod 644 "$TMP/usr/share/applications/animation-studio-community.desktop"
-dpkg-deb --build --root-owner-group "$TMP" "$OUT/animation-studio-community_0.6.1_all.deb"
+dpkg-deb --build --root-owner-group "$TMP" "$OUT/animation-studio-community_0.6.2_all.deb"
