@@ -5,8 +5,8 @@ Open-source experimental 3D modeling, sculpting, painting and animation browser 
 ## Download
 
 See [Releases](https://github.com/sudipdasin/animation-studio/releases) for:
-- `animation-studio-community_0.5.0_all.deb` — Debian/Ubuntu Linux installer.
-- `animation-studio-web-v0.5.0-beta.1.zip` — standalone web preview, including bundled Three.js.
+- `animation-studio-community_0.5.1_all.deb` — Debian/Ubuntu Linux installer.
+- `animation-studio-web-v0.5.1-beta.1.zip` — standalone web preview, including bundled Three.js.
 
 The standalone web preview runs with a simple localhost HTTP server and **does not require a Three.js CDN**. Extract the ZIP, then run `python3 -m http.server 8000` in its folder and open http://localhost:8000.
 
@@ -39,7 +39,7 @@ The release artifacts work without GitHub Pages. To enable the optional site dep
 
 ## Community / future Pro editions
 
-**Animation Studio Community** remains public, free, and GPL-3.0. A future **Animation Studio Pro** may add independently developed commercial capabilities from a **separate private repository**; the private repository has not yet been created. Community code and contributions are not automatically relicensed as proprietary. See [architecture](docs/architecture-community-pro.md), [public/private policy](docs/community-pro-policy.md), and [private bootstrap guide](docs/private-repository-bootstrap.md). No Pro-only source or entitlement logic is included in Community builds.
+**Animation Studio Community** remains public, free, and GPL-3.0. A future **Animation Studio Pro** may add independently developed commercial capabilities from a **separate private repository**; the private repository is maintained separately. Community code and contributions are not automatically relicensed as proprietary. See [architecture](docs/architecture-community-pro.md), [public/private policy](docs/community-pro-policy.md), and [private bootstrap guide](docs/private-repository-bootstrap.md). No Pro-only source or entitlement logic is included in Community builds.
 
 ## v0.5.0 Beta 1 release notes
 
@@ -47,3 +47,10 @@ The release artifacts work without GitHub Pages. To enable the optional site dep
 - Version-correct beta feedback and updated offline cache lifecycle with old-cache cleanup.
 - Community installer identity separated from future private Pro edition.
 - Existing modeling, sculpting, painting, and animation regression checks retained. The beta is not a production-ready stable release.
+
+## v0.5.1 Beta 1 release notes
+
+- Validate project file structure and finite transforms before mutating the scene; invalid projects leave existing objects untouched.
+- Reject unsupported formats, oversized project files and excessive object/keyframe counts.
+- Add a browser regression for non-destructive failure handling.
+- Maintain separate GPL Community and private Pro repositories; Community improvements are proposed to Pro through one-way private synchronization, subject to CI and review.

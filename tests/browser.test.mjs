@@ -73,7 +73,7 @@ test('Community feedback identifies current beta and responsive viewport remains
   await page.evaluate(()=>{window.__feedbackUrl=null;window.open=(url)=>{window.__feedbackUrl=url;return null}});
   await page.locator('#feedback-submit').click();
   const feedbackUrl=await page.evaluate(()=>window.__feedbackUrl);
-  assert.equal(new URL(feedbackUrl).searchParams.get('body').includes('Version: v0.5.0-beta.1'),true);
+  assert.equal(new URL(feedbackUrl).searchParams.get('body').includes('Version: v0.5.1-beta.1'),true);
   await page.setViewportSize({width:720,height:740});
   assert.equal(await page.locator('#viewport').isVisible(),true);
   assert.equal(await page.locator('[data-mode="sculpt"]').isVisible(),true);
