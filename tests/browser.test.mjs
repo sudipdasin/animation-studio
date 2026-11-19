@@ -87,3 +87,14 @@ test('invalid project import is rejected without destroying current scene',async
  assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),before);
  await page.close();
 });
+
+test('duplicating an object preserves source and creates independently editable geometry',async()=>{
+ const page=await openApp();
+ const before=await page.evaluate(()=>window.__studioDebug.signature('sphere'));
+ const count=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.evaluate(()=>window.__studioDebug.select('sphere'));
+ await page.locator('#duplicateBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),count+1);
+ assert.deepEqual(await page.evaluate(()=>window.__studioDebug.signature('sphere')),before);
+ await page.close();
+});
