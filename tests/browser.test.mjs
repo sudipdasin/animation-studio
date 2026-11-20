@@ -176,3 +176,22 @@ test('invalid automatic snapshot does not destroy current scene',async()=>{
  assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),initial);
  await page.close();
 });
+
+test('recovery respects cancellation and keeps edited scene intact',async()=>{
+ const page=await openApp();
+ await page.locator('#recoverySaveBtn').click();
+ await page.evaluate(()=>window.__studioDebug.duplicateSelected());
+ const edited=await page.evaluate(()=>window.__studioDebug.objectCount());
+ page.on('dialog',dialog=>dialog.dismiss());
+ await page.locator('#recoveryRestoreBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),edited);
+ await page.close();
+});
+test('recovery rejects oversized saved data without changing the scene',async()=>{
+ const page=await openApp();
+ const count=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.evaluate(()=>{localStorage.setItem('animation-studio-community-recovery-v1','x'.repeat(1500001));localStorage.removeItem('animation-studio-community-recovery-v1-previous');localStorage.removeItem('animation-studio-community-recovery-v1-autosave')});
+ await page.locator('#recoveryRestoreBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),count);
+ await page.close();
+});
