@@ -33,17 +33,17 @@ jobs:
         run: bash scripts/build-deb.sh
       - name: Verify Debian package
         run: |
-          dpkg-deb --info dist/animation-studio-community_0.6.6_all.deb
-          dpkg-deb --contents dist/animation-studio-community_0.6.6_all.deb | grep '/opt/animation-studio/app.bundle.js'
+          dpkg-deb --info dist/animation-studio-community_0.6.7_all.deb
+          dpkg-deb --contents dist/animation-studio-community_0.6.7_all.deb | grep '/opt/animation-studio/app.bundle.js'
       - name: VM Debian extraction and Python launcher smoke checks
         run: |
           mkdir -p /tmp/animation-studio-pkg
-          dpkg-deb -x dist/animation-studio-community_0.6.6_all.deb /tmp/animation-studio-pkg
+          dpkg-deb -x dist/animation-studio-community_0.6.7_all.deb /tmp/animation-studio-pkg
           test -s /tmp/animation-studio-pkg/opt/animation-studio/app.bundle.js
           test -s /tmp/animation-studio-pkg/opt/animation-studio/index.html
           python3 -m py_compile /tmp/animation-studio-pkg/usr/bin/animation-studio-community
       - name: Package standalone web preview
-        run: cd web-dist && zip -qr ../dist/animation-studio-web-v0.6.6-beta.1.zip .
+        run: cd web-dist && zip -qr ../dist/animation-studio-web-v0.6.7-beta.1.zip .
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -59,20 +59,20 @@ jobs:
         with:
           name: vm-beta-build
           path: artifacts
-      - name: Publish validated v0.6.6 prerelease
+      - name: Publish validated v0.6.7 prerelease
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         shell: bash
         run: |
-          TAG=v0.6.6-beta.1
-          DEB=$(find artifacts -name 'animation-studio-community_0.6.6_all.deb' -print -quit)
-          WEB=$(find artifacts -name 'animation-studio-web-v0.6.6-beta.1.zip' -print -quit)
+          TAG=v0.6.7-beta.1
+          DEB=$(find artifacts -name 'animation-studio-community_0.6.7_all.deb' -print -quit)
+          WEB=$(find artifacts -name 'animation-studio-web-v0.6.7-beta.1.zip' -print -quit)
           test -s "$DEB" && test -s "$WEB"
           if gh release view "$TAG" >/dev/null 2>&1; then
             echo "Release exists; not overwriting."
           else
-            gh release create "$TAG" "$DEB" "$WEB" --target "$GITHUB_SHA" --title "Animation Studio v0.6.6 Beta 1" --prerelease --notes "Community v0.6.6 reliability beta: tested recovery cancellation, oversized storage rejection, autosave fallback and Chromium/WebGL regression checks. Experimental beta; further manual QA recommended."
+            gh release create "$TAG" "$DEB" "$WEB" --target "$GITHUB_SHA" --title "Animation Studio v0.6.7 Beta 1" --prerelease --notes "Community v0.6.7 reliability beta: strict keyframe transform validation, non-destructive invalid project rejection, recovery safeguards and Chromium/WebGL regression checks. Experimental beta; further manual QA recommended."
           fi
   pages:
     if: ${{ vars.ENABLE_GITHUB_PAGES == 'true' }}
