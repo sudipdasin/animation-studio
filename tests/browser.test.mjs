@@ -199,7 +199,7 @@ test('recovery rejects oversized saved data without changing the scene',async()=
 test('invalid project keyframe is rejected before changing current scene',async()=>{
  const page=await openApp();
  const count=await page.evaluate(()=>window.__studioDebug.objectCount());
- const result=await page.evaluate(()=>{try{window.__studioDebug.loadProject({version:1,objects:[],keys:[{name:'sphere',time:1,pos:[0,Infinity,0]}]});return 'accepted'}catch{return 'rejected'}});
+ const result=await page.evaluate(()=>{try{window.__studioDebug.loadProject({version:1,objects:[],keys:[{name:'sphere',t:1,p:[0,Infinity,0],r:[0,0,0],s:[1,1,1]}]});return 'accepted'}catch{return 'rejected'}});
  assert.equal(result,'rejected');
  assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),count);
  await page.close();
@@ -210,5 +210,21 @@ test('invalid project object transform is rejected without scene mutation',async
  const result=await page.evaluate(()=>{try{window.__studioDebug.loadProject({version:1,objects:[{type:'box',name:'bad',color:'#ffffff',position:[0,0,0],rotation:[0,0,0],scale:[0,0,0]}]});return 'accepted'}catch{return 'rejected'}});
  assert.equal(result,'rejected');
  assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),count);
+ await page.close();
+});
+
+test('keyframe project round trip restores objects and animation keys',async()=>{
+ const page=await openApp();
+ const initial=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.evaluate(()=>window.__studioDebug.addKey());
+ const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('animation-studio-community-recovery-v1')||'null'));
+ await page.locator('#recoverySaveBtn').click();
+ const snapshot=await page.evaluate(()=>JSON.parse(localStorage.getItem('animation-studio-community-recovery-v1')));
+ assert.equal(snapshot.keys.length,1);
+ await page.evaluate(()=>window.__studioDebug.duplicateSelected());
+ page.on('dialog',dialog=>dialog.accept());
+ await page.locator('#recoveryRestoreBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),initial);
+ assert.equal(await page.evaluate(()=>window.__studioDebug.keyCount()),1);
  await page.close();
 });
