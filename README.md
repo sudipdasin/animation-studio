@@ -5,8 +5,8 @@ Open-source experimental 3D modeling, sculpting, painting and animation browser 
 ## Download
 
 See [Releases](https://github.com/sudipdasin/animation-studio/releases) for:
-- `animation-studio-community_0.6.7_all.deb` — Debian/Ubuntu Linux installer.
-- `animation-studio-web-v0.6.7-beta.1.zip` — standalone web preview, including bundled Three.js.
+- `animation-studio-community_0.6.8_all.deb` — Debian/Ubuntu Linux installer.
+- `animation-studio-web-v0.6.8-beta.1.zip` — standalone web preview, including bundled Three.js.
 
 The standalone web preview runs with a simple localhost HTTP server and **does not require a Three.js CDN**. Extract the ZIP, then run `python3 -m http.server 8000` in its folder and open http://localhost:8000.
 
@@ -111,3 +111,10 @@ The release artifacts work without GitHub Pages. To enable the optional site dep
 - Add Chromium tests confirming invalid keyframes and zero-scale objects do not replace the working scene.
 - Retain local autosave, recovery fallback and existing editing regression coverage.
 - Stable certification still requires broader Linux VM and integration testing.
+
+## v0.6.8 Beta 1 release notes
+
+- Fix an incompatibility between the animation editor's keyframe schema (t, p, r, s) and project-import validation.
+- Validate animation keyframe vectors and scale before modifying the scene.
+- Add a browser regression test for animated-scene snapshot save, edit and restore.
+- Maintain automatic recovery, manual checkpoints and corrupt-data rejection.
