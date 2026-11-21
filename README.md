@@ -5,8 +5,8 @@ Open-source experimental 3D modeling, sculpting, painting and animation browser 
 ## Download
 
 See [Releases](https://github.com/sudipdasin/animation-studio/releases) for:
-- `animation-studio-community_2.0.0_all.deb` — Debian/Ubuntu Linux installer.
-- `animation-studio-web-v2.0.0-beta.1.zip` — standalone web preview, including bundled Three.js.
+- `animation-studio-community_3.0.0_all.deb` — Debian/Ubuntu Linux installer.
+- `animation-studio-web-v3.0.0-beta.1.zip` — standalone web preview, including bundled Three.js.
 
 The standalone web preview runs with a simple localhost HTTP server and **does not require a Three.js CDN**. Extract the ZIP, then run `python3 -m http.server 8000` in its folder and open http://localhost:8000.
 
@@ -136,3 +136,12 @@ The release artifacts work without GitHub Pages. To enable the optional site dep
 - Retain editable timeline, recovery snapshots, project validation and previous Community functionality.
 - Publish versioned Debian installer and standalone browser ZIP as direct GitHub Release assets after successful CI.
 - This is a v2 major beta milestone, not a stable certification or a replacement for cross-distro VM testing.
+
+## v3.0.0 Beta 1 major release notes
+
+- Add previous and next keyframe navigation buttons to the animation timeline.
+- Navigate selected object's keyframes in chronological order, without moving beyond available keys.
+- Add Chromium regression test for keyframe navigation.
+- Retain independent animation keyframes when duplicating objects, editable timeline, recovery and import safeguards.
+- Publish Linux Debian installer and browser ZIP directly to GitHub Releases after successful CI verification.
+- v3.0.0-beta.1 is a major-version public beta; broad multi-distribution VM testing remains outstanding.
