@@ -283,3 +283,29 @@ test('retiming refuses a collision with another keyframe',async()=>{
  assert.deepEqual(await page.evaluate(()=>window.__studioDebug.keyTimes()),[2,2.25]);
  await page.close();
 });
+
+test('undo and redo keyframe editing restore scene state',async()=>{
+ const page=await openApp();
+ const count=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.evaluate(()=>window.__studioDebug.addKey());
+ assert.equal(await page.evaluate(()=>window.__studioDebug.keyCount()),1);
+ await page.locator('#undoBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.keyCount()),0);
+ await page.locator('#redoBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.keyCount()),1);
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),count);
+ await page.close();
+});
+test('undo and redo object duplication restore object and keys',async()=>{
+ const page=await openApp();
+ await page.evaluate(()=>window.__studioDebug.addKey());
+ const before=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.evaluate(()=>window.__studioDebug.duplicateSelected());
+ await page.locator('#undoBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),before);
+ assert.equal(await page.evaluate(()=>window.__studioDebug.keyCount()),1);
+ await page.locator('#redoBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),before+1);
+ assert.equal(await page.evaluate(()=>window.__studioDebug.keyCount()),2);
+ await page.close();
+});
