@@ -309,3 +309,21 @@ test('undo and redo object duplication restore object and keys',async()=>{
  assert.equal(await page.evaluate(()=>window.__studioDebug.keyCount()),2);
  await page.close();
 });
+
+test('scene history tracks adding an object',async()=>{
+ const page=await openApp();
+ const before=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.evaluate(()=>window.__studioDebug.duplicateSelected());
+ await page.locator('#undoBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),before);
+ await page.close();
+});
+test('loading a project can be undone without losing original scene',async()=>{
+ const page=await openApp();
+ const before=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.evaluate(()=>window.__studioDebug.loadProject({version:1,objects:[],keys:[]}));
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),0);
+ await page.locator('#undoBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),before);
+ await page.close();
+});
