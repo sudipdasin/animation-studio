@@ -228,3 +228,19 @@ test('keyframe project round trip restores objects and animation keys',async()=>
  assert.equal(await page.evaluate(()=>window.__studioDebug.keyCount()),1);
  await page.close();
 });
+
+test('timeline upserts same-time keyframes instead of duplicating',async()=>{
+ const page=await openApp();
+ await page.evaluate(()=>{window.__studioDebug.addKey();window.__studioDebug.addKey()});
+ assert.equal(await page.evaluate(()=>window.__studioDebug.keyCount()),1);
+ await page.close();
+});
+test('timeline keyframe delete removes current key and keeps objects',async()=>{
+ const page=await openApp();
+ const before=await page.evaluate(()=>window.__studioDebug.objectCount());
+ await page.evaluate(()=>window.__studioDebug.addKey());
+ await page.locator('#deleteKeyBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.keyCount()),0);
+ assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),before);
+ await page.close();
+});
