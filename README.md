@@ -5,8 +5,8 @@ Open-source experimental 3D modeling, sculpting, painting and animation browser 
 ## Download
 
 See [Releases](https://github.com/sudipdasin/animation-studio/releases) for:
-- `animation-studio-community_3.1.0_all.deb` — Debian/Ubuntu Linux installer.
-- `animation-studio-web-v3.1.0-beta.1.zip` — standalone web preview, including bundled Three.js.
+- `animation-studio-community_3.2.0_all.deb` — Debian/Ubuntu Linux installer.
+- `animation-studio-web-v3.2.0-beta.1.zip` — standalone web preview, including bundled Three.js.
 
 The standalone web preview runs with a simple localhost HTTP server and **does not require a Three.js CDN**. Extract the ZIP, then run `python3 -m http.server 8000` in its folder and open http://localhost:8000.
 
@@ -153,3 +153,12 @@ The release artifacts work without GitHub Pages. To enable the optional site dep
 - Chromium regression tests cover keyframe movement, collision rejection and previous/next navigation.
 - Linux Debian installer and browser ZIP are attached directly to GitHub Releases after successful CI.
 - Cross-distribution VM certification and private Pro synchronization remain separate verification tasks.
+
+## v3.2.0 Beta 1 release notes
+
+- Add 50-step bounded undo/redo history for object duplication, object deletion and keyframe edits.
+- Add Undo and Redo toolbar buttons and Ctrl+Z, Ctrl+Shift+Z / Ctrl+Y keyboard shortcuts.
+- Restore object selection, playhead time, animation keyframes and scene data during undo/redo.
+- Add Chromium regression tests for undo/redo of keyframe edits and duplicated animated objects.
+- This history system does not yet cover every possible property change, and remains a beta feature.
+- Publish Debian installer and browser ZIP directly as GitHub Release assets following successful CI.
