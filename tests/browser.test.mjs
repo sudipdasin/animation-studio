@@ -265,3 +265,21 @@ test('timeline previous and next keyframe navigation',async()=>{
  assert.equal(await page.evaluate(()=>window.__studioDebug.currentTime()),5);
  await page.close();
 });
+
+test('keyframe retiming moves the playhead and preserves the key',async()=>{
+ const page=await openApp();
+ await page.evaluate(()=>{window.__studioDebug.seek(2);window.__studioDebug.addKey()});
+ await page.locator('#shiftKeyRightBtn').click();
+ assert.deepEqual(await page.evaluate(()=>window.__studioDebug.keyTimes()),[2.25]);
+ assert.equal(await page.evaluate(()=>window.__studioDebug.currentTime()),2.25);
+ await page.locator('#shiftKeyLeftBtn').click();
+ assert.deepEqual(await page.evaluate(()=>window.__studioDebug.keyTimes()),[2]);
+ await page.close();
+});
+test('retiming refuses a collision with another keyframe',async()=>{
+ const page=await openApp();
+ await page.evaluate(()=>{window.__studioDebug.seek(2);window.__studioDebug.addKey();window.__studioDebug.seek(2.25);window.__studioDebug.addKey();window.__studioDebug.seek(2)});
+ await page.locator('#shiftKeyRightBtn').click();
+ assert.deepEqual(await page.evaluate(()=>window.__studioDebug.keyTimes()),[2,2.25]);
+ await page.close();
+});
