@@ -255,3 +255,13 @@ test('duplicating animated object preserves independent keyframes',async()=>{
  assert.equal(await page.evaluate(()=>window.__studioDebug.keyCount()),before);
  await page.close();
 });
+
+test('timeline previous and next keyframe navigation',async()=>{
+ const page=await openApp();
+ await page.evaluate(()=>{window.__studioDebug.addKey();window.__studioDebug.seek(2);window.__studioDebug.addKey();window.__studioDebug.seek(5);window.__studioDebug.addKey();window.__studioDebug.seek(3)});
+ await page.locator('#previousKeyBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.currentTime()),2);
+ await page.locator('#nextKeyBtn').click();
+ assert.equal(await page.evaluate(()=>window.__studioDebug.currentTime()),5);
+ await page.close();
+});
