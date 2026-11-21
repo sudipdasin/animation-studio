@@ -5,8 +5,8 @@ Open-source experimental 3D modeling, sculpting, painting and animation browser 
 ## Download
 
 See [Releases](https://github.com/sudipdasin/animation-studio/releases) for:
-- `animation-studio-community_3.0.0_all.deb` — Debian/Ubuntu Linux installer.
-- `animation-studio-web-v3.0.0-beta.1.zip` — standalone web preview, including bundled Three.js.
+- `animation-studio-community_3.1.0_all.deb` — Debian/Ubuntu Linux installer.
+- `animation-studio-web-v3.1.0-beta.1.zip` — standalone web preview, including bundled Three.js.
 
 The standalone web preview runs with a simple localhost HTTP server and **does not require a Three.js CDN**. Extract the ZIP, then run `python3 -m http.server 8000` in its folder and open http://localhost:8000.
 
@@ -145,3 +145,11 @@ The release artifacts work without GitHub Pages. To enable the optional site dep
 - Retain independent animation keyframes when duplicating objects, editable timeline, recovery and import safeguards.
 - Publish Linux Debian installer and browser ZIP directly to GitHub Releases after successful CI verification.
 - v3.0.0-beta.1 is a major-version public beta; broad multi-distribution VM testing remains outstanding.
+
+## v3.1.0 Beta 1 release notes
+
+- Retiming controls shift the selected object's current keyframe backward or forward by 0.25 seconds.
+- Reject retiming that would exceed the timeline or collide with an existing keyframe.
+- Chromium regression tests cover keyframe movement, collision rejection and previous/next navigation.
+- Linux Debian installer and browser ZIP are attached directly to GitHub Releases after successful CI.
+- Cross-distribution VM certification and private Pro synchronization remain separate verification tasks.
