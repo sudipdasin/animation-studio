@@ -244,3 +244,14 @@ test('timeline keyframe delete removes current key and keeps objects',async()=>{
  assert.equal(await page.evaluate(()=>window.__studioDebug.objectCount()),before);
  await page.close();
 });
+
+test('duplicating animated object preserves independent keyframes',async()=>{
+ const page=await openApp();
+ await page.evaluate(()=>window.__studioDebug.addKey());
+ const before=await page.evaluate(()=>window.__studioDebug.keyCount());
+ await page.evaluate(()=>window.__studioDebug.duplicateSelected());
+ assert.equal(await page.evaluate(()=>window.__studioDebug.keyCount()),before*2);
+ await page.evaluate(()=>window.__studioDebug.deleteKeyAtPlayhead());
+ assert.equal(await page.evaluate(()=>window.__studioDebug.keyCount()),before);
+ await page.close();
+});
