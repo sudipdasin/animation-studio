@@ -5,7 +5,8 @@
   "description": "GPL-3.0 Animation Studio Community 3D editor beta",
   "scripts": {
     "build:web": "node scripts/build-web.mjs",
-    "test:browser": "node --test tests/browser.test.mjs"
+    "test:browser": "node --test tests/browser.test.mjs",
+    "test:logic": "node tests/logic.test.mjs"
   },
   "dependencies": {
     "three": "0.161.0",
