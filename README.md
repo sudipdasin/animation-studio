@@ -171,3 +171,7 @@ The release artifacts work without GitHub Pages. To enable the optional site dep
 - Preserve previous sculpting history and timeline editing controls.
 - Publish Debian installer and standalone browser ZIP as direct GitHub Release assets after CI verification.
 - Beta: broad Linux distro VM testing and full scene-history coverage are not yet certified.
+
+## Development milestone: project fidelity and animation curves
+
+Unreleased integration candidate. Includes mesh persistence using optional little-endian Float32 Base64 payloads, legacy project compatibility, five outgoing keyframe interpolation modes, scene-history geometry preservation, strict scene validation and separate sculpt-history shortcuts. Explicit project files are limited to 64 MiB; local recovery remains limited to 1.5 million characters and browser quota. External media is not embedded. Browser tests must pass before publishing a new release. GitHub Actions and CircleCI are restricted; do not trigger without owner approval.
